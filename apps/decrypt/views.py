@@ -20,4 +20,4 @@ class DecryptMessageAPIView(GenericAPIView):
         message = serializer.validated_data["message"]
 
         decrypted = GPG().decrypt(message, passphrase=passphrase)
-        return Response({"DecryptedMessage": decrypted.data})
+        return Response({"DecryptedMessage": decrypted.data.decode()})
