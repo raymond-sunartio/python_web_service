@@ -1,3 +1,4 @@
+from gnupg import GPG
 from rest_framework import permissions
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -15,9 +16,8 @@ class DecryptMessageAPIView(GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        # passphrase = serializer.validated_data["passphrase"]
+        passphrase = serializer.validated_data["passphrase"]
         message = serializer.validated_data["message"]
 
-        decrypted_message = message
-
-        return Response({"DecryptedMessage": decrypted_message})
+        decrypted = GPG().decrypt(message, passphrase=passphrase)
+        return Response({"DecryptedMessage": decrypted.data})
